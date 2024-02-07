@@ -12,12 +12,25 @@ public class AntallStiar {
 		 *            
 		 * Altså 6 stier           
 		 */
-		System.out.println("Antall stiar: " + antallStiar(1, 1, 3, 3));   
+		System.out.println("Antall stiar: " + antallStiar(1, 1, 5, 5));   
 	}
 	
 	static int antallStiar(int startX, int startY, int sluttX, int sluttY) {
-		//TODO
-		return 0;
+		
+		
+//		basissteg
+		if(startX>sluttX || startY>sluttY) return 0;
+		if(startX == sluttX && startY == sluttY) return 1;
+		
+		
+		int høyre =		antallStiar(startX+1,  startY, sluttX,  sluttY);
+		int ned = 		antallStiar(startX,  startY+1, sluttX,  sluttY);
+		
+		return høyre + ned;
+		
+		
+		
+		
 	}
 
 

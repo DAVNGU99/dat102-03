@@ -23,11 +23,11 @@ public class LenketBag<T> implements BagADT<T> {
 
 	/************************************************************/
 
-	private Node forste;
+	private Node første;
 	private int antall;
 	
 	public LenketBag() {
-		forste = null;
+		første = null;
 		antall = 0;
 	}
 	
@@ -35,14 +35,12 @@ public class LenketBag<T> implements BagADT<T> {
 
 	@Override
 	public int getCurrentSize() {
-		//TODO
-		return 0; 
+		return antall; 
 	}
 
 	@Override
 	public boolean isEmpty() {
-		//TODO
-		return false;
+		return antall == 0;
 	}
 
 	@Override
@@ -50,7 +48,13 @@ public class LenketBag<T> implements BagADT<T> {
 		//TODO
 		// Legger inn først i listen siden det er enklest
 		
-		return false;
+			Node ny = new Node(newEntry);
+			ny.neste = første;
+			første = ny;
+			antall++;
+		
+		
+		return true;
 	}
 
 	@Override
@@ -58,8 +62,17 @@ public class LenketBag<T> implements BagADT<T> {
 		//TODO
 		// Først sjekke om tom
 		
+		if(isEmpty()) {
+			return null;
+		}
+		
 		// Fjerner den første siden det er enklest
-		return null;
+		T verdi = første.data;
+		første = første.neste;
+		antall--;
+		return verdi;
+		
+		
 	}
 
 	@Override
@@ -81,7 +94,19 @@ public class LenketBag<T> implements BagADT<T> {
 	 * Returnerer referanse til node hvis funnet, ellers null.
 	 */
 	private Node finnNode(T entry) {
-		//TODO
+		
+		
+		Node temp = første;
+		
+		while(temp != null) {
+			if(temp.data.equals(entry)) {
+				return temp;
+			}
+			temp = temp.neste;
+		}
+		
+		
+		
 		return null;
 	}
 
@@ -90,6 +115,11 @@ public class LenketBag<T> implements BagADT<T> {
 		//TODO
 		// Her kan vi bruke remove() som hjelpemetode og gå i en løkke.
 		// Evt. bare nullstille medlemsvariabler.
+		
+		while(!isEmpty()){
+			remove();
+		}
+		
 	}
 
 	@Override
@@ -125,7 +155,7 @@ public class LenketBag<T> implements BagADT<T> {
 	 * Ikke en del av BagADT-kontrakten.
 	 */
 	public void skrivUt() {
-		Node denne = forste;
+		Node denne = første;
 		while(denne != null) {
 			System.out.println(denne.data);
 			denne = denne.neste;
