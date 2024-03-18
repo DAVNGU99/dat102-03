@@ -27,12 +27,12 @@ public class DobbelLenketDeque<T> implements DequeADT<T> {
 	public void addToBack(T newEntry) {
 
 		DLNode newNode = new DLNode(newEntry);
-		newNode.prev = lastNode;
+		newNode.forrige = lastNode;
 
 		if (isEmpty()) {
 			firstNode = newNode;
 		} else {
-			lastNode.next = newNode;
+			lastNode.neste = newNode;
 		}
 		lastNode = newNode;
 	}
@@ -40,12 +40,12 @@ public class DobbelLenketDeque<T> implements DequeADT<T> {
 	public void addToFront(T newEntry) {
 
 		DLNode newNode = new DLNode(newEntry);
-		newNode.next = firstNode;
+		newNode.neste = firstNode;
 
 		if (isEmpty()) {
 			lastNode = newNode;
 		} else {
-			firstNode.prev = newNode;
+			firstNode.forrige = newNode;
 		}
 		firstNode = newNode;
 	}
@@ -68,12 +68,12 @@ public class DobbelLenketDeque<T> implements DequeADT<T> {
 
 		T front = getFront(); // Might throw EmptyQueueException
 
-		firstNode = firstNode.next;
+		firstNode = firstNode.neste;
 
 		if (firstNode == null) {
 			lastNode = null;
 		} else {
-			firstNode.prev = null;
+			firstNode.forrige = null;
 		}
 		return front;
 	}
@@ -82,12 +82,12 @@ public class DobbelLenketDeque<T> implements DequeADT<T> {
 
 		T back = getBack(); // Might throw EmptyQueueException
 
-		lastNode = lastNode.prev;
+		lastNode = lastNode.forrige;
 
 		if (lastNode == null) {
 			firstNode = null;
 		} else {
-			lastNode.next = null;
+			lastNode.neste = null;
 		}
 		return back;
 	}
@@ -106,13 +106,13 @@ public class DobbelLenketDeque<T> implements DequeADT<T> {
 	private class DLNode {
 
 		private T data;
-		private DLNode next;
-		private DLNode prev;
+		private DLNode neste;
+		private DLNode forrige;
 
 		private DLNode(T dataPortion) {
 			data = dataPortion;
-			next = null;
-			prev = null;
+			neste = null;
+			forrige = null;
 		}
 	}
 

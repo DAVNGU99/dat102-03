@@ -14,17 +14,17 @@ import no.hvl.dat102.adter.KoeADT;
  * Fikset littegrann av Lars-Petter Helland, februar 2024
  */
 
-public final class LenketKoe<T> implements KoeADT<T> {
+public final class LenketKoe<Datatype> implements KoeADT<Datatype> {
 
 	/* -------------------------------------------------------------- */
 
 	private class Node {
-		private T data;
-		private Node neste;
+		private Datatype innhold;
+		private Node peker;
 
-		private Node(T data) {
-			this.data = data;
-			this.neste = null;
+		private Node(Datatype data) {
+			this.innhold = data;
+			this.peker = null;
 		}
 	}
 
@@ -39,33 +39,33 @@ public final class LenketKoe<T> implements KoeADT<T> {
 	}
 
 	@Override
-	public void enqueue(T newEntry) {
+	public void enqueue(Datatype newEntry) {
 
 		Node nyNode = new Node(newEntry);
 
 		if (isEmpty()) {
 			foran = nyNode;
 		} else {
-			bak.neste = nyNode;
+			bak.peker = nyNode;
 		}
 		bak = nyNode;
 	}
 
 	@Override
-	public T getFront() {
+	public Datatype getFront() {
 
 		if (isEmpty()) {
 			throw new EmptyQueueException();
 		}
-		return foran.data;
+		return foran.innhold;
 	}
 
 	@Override
-	public T dequeue() {
-		T front = getFront(); // Might throw EmptyQueueException
+	public Datatype dequeue() {
+		Datatype front = getFront(); // Might throw EmptyQueueException
 							  // Assertion: firstNode != null
-		foran.data = null;
-		foran = foran.neste;
+		foran.innhold = null;
+		foran = foran.peker;
 
 		if (foran == null) {
 			bak = null;

@@ -13,17 +13,18 @@ package no.hvl.dat102.lenketliste;
  *          startparentes{ stå på slutten av linje! Alle blokker bør ha
  *          klammeparenteser{}, også hvis kun én linje! Alle metoder definert i
  *          interface eller superklasse skal ha @Override! Bruk kun kommentarer
- *          for ting som IKKE kan uttrykkes i kode! Alle andre kommentarer er boss.
+ *          for ting som IKKE kan uttrykkes i kode! Alle andre kommentarer er
+ *          boss.
  * 
  *          Ellers fikser jeg litt på kodestil og forenkler der jeg kan. Jeg har
- *          også tatt et valg om "stil" for feilhåndtering, vet at feilsituasjoner
- *          ryddes av veien (return/throw) FØR man går videre.
+ *          også tatt et valg om "stil" for feilhåndtering, vet at
+ *          feilsituasjoner ryddes av veien (return/throw) FØR man går videre.
  * 
  *          Jeg har også gjort et designvalg om å bruke Node sin data og next
  *          direkte med =, i stedet for å bruke getNext() og setNext().
  * 
  */
-public class LenketListe<T> implements ListeADT<T> {
+public class LenketListe2<T> implements ListeADT<T> {
 
 	/* ------------------------------------------------------------------- */
 
@@ -41,136 +42,174 @@ public class LenketListe<T> implements ListeADT<T> {
 	/* ------------------------------------------------------------------- */
 
 	private Node firstNode; // Reference to first node of chain
+	private Node lastNode;
 	private int numberOfEntries;
 
-	public LenketListe() {
+	public LenketListe2() {
+
 		initializeDataFields();
+
 	}
 
 	private void initializeDataFields() {
-		firstNode = null;
-		numberOfEntries = 0;
+
+		this.firstNode = null;
+		this.numberOfEntries = 0;
+
 	}
 
 	@Override
 	public void clear() {
+
 		initializeDataFields();
+
 	}
 
 	@Override
 	public void add(T newEntry) {
-		Node newNode = new Node(newEntry);
+
+		Node nyNode = new Node(newEntry);
 
 		if (isEmpty()) {
-			firstNode = newNode;
+			firstNode = nyNode;
 		} else {
-			Node lastNode = getNodeAt(numberOfEntries);
-			lastNode.next = newNode;
+			Node sisteNode = getNodeAt(numberOfEntries);
+			sisteNode.next = nyNode;
 		}
 		numberOfEntries++;
+
 	}
 
 	@Override
 	public void add(int givenPosition, T newEntry) {
 
-		if ((givenPosition < 1) || (givenPosition > numberOfEntries + 1)) {
-			throw new IndexOutOfBoundsException("Illegal position given to add operation.");
+		if (givenPosition < 1 || givenPosition > numberOfEntries) {
+			throw new IndexOutOfBoundsException("Utenfor rekkevidde");
 		}
 
-		Node newNode = new Node(newEntry);
+		Node nyNode = new Node(newEntry);
+
 		if (givenPosition == 1) {
-			newNode.next = firstNode;
-			firstNode = newNode;
+			nyNode.next = firstNode;
+			firstNode = nyNode;
 		} else {
-			Node nodeBefore = getNodeAt(givenPosition - 1);
-			Node nodeAfter = nodeBefore.next;
-			
-			newNode.next = nodeAfter;
-			nodeBefore.next = newNode;
+
+			Node nodeFør = getNodeAt(numberOfEntries - 1);
+			Node nodeEtter = getNodeAt(givenPosition + 1);
+
+			nodeFør.next = nyNode;
+			nyNode.next = nodeEtter;
+
 		}
+
 		numberOfEntries++;
+
 	}
 
 	@Override
 	public T remove(int givenPosition) {
-
-		if ((givenPosition < 1) || (givenPosition > numberOfEntries)) {
-			throw new IndexOutOfBoundsException("Illegal position given to remove operation.");
+		
+		if(givenPosition < 1 || givenPosition > numberOfEntries) {
+			throw new IndexOutOfBoundsException("Utenfor rekkevidde");
 		}
-
-		T result = null;
-		if (givenPosition == 1) {
-			result = firstNode.data;
+		
+		T slettet = null;
+		
+	
+		
+		if(givenPosition == 1) {
+			
+			slettet = firstNode.data;
 			firstNode = firstNode.next;
-		} else {
-			Node nodeBefore = getNodeAt(givenPosition - 1);
+		}else {
 			
-			Node nodeToRemove = nodeBefore.next;
+		
+			Node førSlett = getNodeAt(givenPosition-1);
 			
-			result = nodeToRemove.data;
+			Node slettDenneNoden = førSlett.next;
 			
-			Node nodeAfter = nodeToRemove.next;
+			førSlett.next = slettDenneNoden.next;
 			
-			nodeBefore.next = nodeAfter;
+			slettet = slettDenneNoden.data;
+			
+			
 		}
+		
+		
 		numberOfEntries--;
-		return result;
+		return slettet;
+		
+
 	}
 
 	@Override
 	public T replace(int givenPosition, T newEntry) {
 
-		if ((givenPosition < 1) || (givenPosition > numberOfEntries)) {
-			throw new IndexOutOfBoundsException("Illegal position given to replace operation.");
+		if(givenPosition < 1 || givenPosition > numberOfEntries) {
+			throw new IndexOutOfBoundsException("Utenfor rekkevidde");
 		}
-
-		Node desiredNode = getNodeAt(givenPosition);
 		
-		T originalEntry = desiredNode.data;
-		desiredNode.data = newEntry;
-		return originalEntry;
+		
+		Node nyNode = getNodeAt(givenPosition);
+		T KlonaNode = nyNode.data;
+		
+		nyNode.data = newEntry;
+		return KlonaNode;
+		
+		
 	}
 
 	@Override
 	public T getEntry(int givenPosition) {
-
-		if ((givenPosition < 1) || (givenPosition > numberOfEntries)) {
-			throw new IndexOutOfBoundsException("Illegal position given to getEntry operation.");
+		
+		if((givenPosition < 1) || (givenPosition > numberOfEntries)) {
+			throw new IndexOutOfBoundsException("Utenfor rekkevidde");
 		}
+
 		return getNodeAt(givenPosition).data;
+		
+		
+		
 	}
 
 	@Override
 	public T[] toArray() {
-		@SuppressWarnings("unchecked")
-		T[] result = (T[]) new Object[numberOfEntries];
 
+		
+		@SuppressWarnings("unchecked")
+		T[] tab =(T[]) new Object[numberOfEntries];
+		
 		int index = 0;
+		
+		
 		Node currentNode = firstNode;
-		while ((index < numberOfEntries) && (currentNode != null)) {
-			result[index] = currentNode.data;
+		
+		while((index<numberOfEntries) && (currentNode != null)) {
+			tab[index] = currentNode.data;
 			currentNode = currentNode.next;
-			index++;
+			index ++;
 		}
-		return result;
+		
+		return tab;
+		
+		
+		
 	}
 
 	@Override
 	public boolean contains(T anEntry) {
-		Node currentNode = firstNode;
 
-		while (currentNode != null) {
-			if (anEntry.equals(currentNode.data)) {
+		Node currentNode = firstNode;
+		
+		
+		while(currentNode != null) {
+			if(anEntry.equals(currentNode.data)) {
 				return true;
 			}
 			currentNode = currentNode.next;
 		}
+		
 		return false;
-	}
-
-	@Override
-	public int getLength() {
-		return numberOfEntries;
 	}
 
 	/*

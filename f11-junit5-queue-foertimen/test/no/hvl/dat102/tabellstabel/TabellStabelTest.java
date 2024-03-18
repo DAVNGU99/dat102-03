@@ -1,5 +1,6 @@
 package no.hvl.dat102.tabellstabel;
 
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -18,7 +19,20 @@ class TabellStabelTest {
 
 	@BeforeEach
 	void nullstill() {
-		//TODO
+		stabel0 = new TabellStabel<String>();
+		
+		
+		
+		stabel1 = new TabellStabel<String>();
+		stabel1.push("Java");
+		
+		stabel2 = new TabellStabel<String>();
+		stabel2.push("Per");
+		stabel2.push("Pål");
+		
+
+		
+		
 	}
 	
 	/*
@@ -37,46 +51,61 @@ class TabellStabelTest {
 	
 	@Test
 	void enNyStabelSkalVaereTom() {
-		//TODO
+		assertTrue(stabel0.isEmpty());
+		assertFalse(stabel1.isEmpty());
 	}
 	
 	@Test
 	void enStabelMedEttEllerFlereElementerSkalIkkeVaereTom() {
-		//TODO
+		assertFalse(stabel1.isEmpty());
 	}
 	
 	@Test
 	void pushSkalLeggeElementetPaaToppenAvStabelen() {
-		//TODO
+		stabel2.push("Espen");
+		assertEquals("Espen", stabel2.peek());
 	}
 	
 	@Test
 	void peekPaaTomStabelSkalGiEmptyStackException() {
+		
+	//	assertThrows((EmptyStackException.class), () -> stabel0.peek());
 		//TODO
 	}
 	
 	@Test
 	void peekPaaIkkeTomStabelSkalReturnereToppelementet() {
-		//TODO
+		
+		
+		assertEquals("Java", stabel1.peek());
+		
+		
+		
 	}
 	
 	@Test
 	void peekPaaIkkeTomStabelSkalIkkeEndreStabelensInnhold() {
-		//TODO
+		
+		assertEquals("Pål", stabel2.peek());
+		assertEquals("Pål", stabel2.peek());
+		assertFalse(stabel2.isEmpty());
 	}
 	
 	@Test
 	void popPaaTomStabelSkalGiEmptyStackException() {
-		//TODO
+		//assertThrows((EmptyStackException.class), () -> stabel0.pop());
 	}
 	
 	@Test
 	void popPaaIkkeTomStabelSkalFjerneOgReturnereToppelementet() {
-		//TODO
+		
+		stabel2.pop();
+		assertEquals("Per", stabel2.peek() );
 	}
 	
 	@Test
 	void clearSkalTommeStabelen() {
-		//TODO
+		stabel2.clear();
+		assertTrue(stabel2.isEmpty());
 	}
 }

@@ -16,11 +16,11 @@ import no.hvl.dat102.adter.KoeADT;
  * Fikset littegrann av Lars-Petter Helland, februar 2024
  * 
  */
-public final class SirkulaerKoe<T> implements KoeADT<T> {
+public final class SirkulaerKoe<Datatype> implements KoeADT<Datatype> {
 
 	private static final int DEFAULT_CAPACITY = 3; // Small capacity for testing
 
-	private T[] queue; // Circular array of queue entries and one unused location
+	private Datatype[] tabell; // Circular array of queue entries and one unused location
 	private int frontIndex; // Index of front entry
 	private int backIndex; // Index of back entry
 
@@ -30,44 +30,44 @@ public final class SirkulaerKoe<T> implements KoeADT<T> {
 
 	@SuppressWarnings("unchecked")
 	public SirkulaerKoe(int initialCapacity) {
-		queue = (T[]) new Object[initialCapacity + 1];
+		tabell = (Datatype[]) new Object[initialCapacity + 1];
 		frontIndex = 0;
 		backIndex = initialCapacity;
 	}
 
 	private int plussEnModuloN(int index) {
-		return (index + 1) % queue.length;
+		return (index + 1) % tabell.length;
 	}
 
 	@Override
-	public void enqueue(T newEntry) {
+	public void enqueue(Datatype newEntry) {
 		ensureCapacity();
 		backIndex = plussEnModuloN(backIndex);
-		queue[backIndex] = newEntry;
+		tabell[backIndex] = newEntry;
 	}
 
 	@Override
 	public String toString() {
-		return "SirkulaerKoe [queue=" + Arrays.toString(queue) 
+		return "SirkulaerKoe [queue=" + Arrays.toString(tabell) 
 				+ ", frontIndex=" + frontIndex 
 				+ ", backIndex=" + backIndex + "]";
 	}
 
 	@Override
-	public T getFront() {
+	public Datatype getFront() {
 		if (isEmpty()) {
 			throw new EmptyQueueException();
 		}
-		return queue[frontIndex];
+		return tabell[frontIndex];
 	}
 
 	@Override
-	public T dequeue() {
+	public Datatype dequeue() {
 		if (isEmpty()) {
 			throw new EmptyQueueException();
 		}
-		T front = queue[frontIndex];
-		queue[frontIndex] = null;
+		Datatype front = tabell[frontIndex];
+		tabell[frontIndex] = null;
 		frontIndex = plussEnModuloN(frontIndex);
 		return front;
 	}
@@ -81,12 +81,12 @@ public final class SirkulaerKoe<T> implements KoeADT<T> {
 	public void clear() {
 		if (!isEmpty()) { // Deallocates only the used portion
 			for (int index = frontIndex; index != backIndex; index = plussEnModuloN(index)) {
-				queue[index] = null;
+				tabell[index] = null;
 			}
-			queue[backIndex] = null;
+			tabell[backIndex] = null;
 		}
 		frontIndex = 0;
-		backIndex = queue.length - 1;
+		backIndex = tabell.length - 1;
 	}
 
 	// Doubles the size of the array queue if it is full.
@@ -94,14 +94,14 @@ public final class SirkulaerKoe<T> implements KoeADT<T> {
 	private void ensureCapacity() {
 
 		if (isArrayFull()) {
-			T[] oldQueue = queue;
+			Datatype[] oldQueue = tabell;
 			int oldSize = oldQueue.length;
 			int newSize = 2 * oldSize;
 			
 //			System.out.println("Kapasitet utvides til " + newSize);
-			queue = (T[]) new Object[newSize];
+			tabell = (Datatype[]) new Object[newSize];
 			for (int index = 0; index < oldSize - 1; index++) {
-				queue[index] = oldQueue[frontIndex];
+				tabell[index] = oldQueue[frontIndex];
 				frontIndex = (frontIndex + 1) % oldSize;
 			}
 			frontIndex = 0;
@@ -110,6 +110,6 @@ public final class SirkulaerKoe<T> implements KoeADT<T> {
 	}
 
 	private boolean isArrayFull() {
-		return frontIndex == ((backIndex + 2) % queue.length);
+		return frontIndex == ((backIndex + 2) % tabell.length);
 	}
 }

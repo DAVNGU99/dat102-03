@@ -77,6 +77,8 @@ public class TabellListe<T> implements ListeADT<T> {
 			tab[index] = null;
 		}
 		n = 0;
+		
+		
 	}
 
 	@Override
